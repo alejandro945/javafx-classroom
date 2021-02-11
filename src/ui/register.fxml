@@ -70,7 +70,7 @@
             <Font name="Verdana" size="20.0" />
          </font>
       </Label>
-      <RadioButton layoutX="262.0" layoutY="183.0" mnemonicParsing="false" onAction="#rdMale" text="Male">
+      <RadioButton fx:id="maleRb" layoutX="262.0" layoutY="183.0" mnemonicParsing="false" onAction="#rdMale" text="Male">
          <font>
             <Font name="Verdana" size="15.0" />
          </font>
@@ -78,12 +78,12 @@
             <ToggleGroup fx:id="gender" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton layoutX="352.0" layoutY="183.0" mnemonicParsing="false" onAction="#rdFemale" text="Female" toggleGroup="$gender">
+      <RadioButton fx:id="femaleRb" layoutX="352.0" layoutY="183.0" mnemonicParsing="false" onAction="#rdFemale" text="Female" toggleGroup="$gender">
          <font>
             <Font name="Verdana" size="15.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="468.0" layoutY="183.0" mnemonicParsing="false" onAction="#rdOther" text="Other" toggleGroup="$gender">
+      <RadioButton fx:id="otherRb" layoutX="468.0" layoutY="183.0" mnemonicParsing="false" onAction="#rdOther" text="Other" toggleGroup="$gender">
          <font>
             <Font name="Verdana" size="15.0" />
          </font>
@@ -93,15 +93,15 @@
             <Font name="Verdana" size="20.0" />
          </font>
       </Label>
-      <CheckBox layoutX="267.0" layoutY="235.0" mnemonicParsing="false" onAction="#sftEgn" text="Software Engineering" />
-      <CheckBox layoutX="344.0" layoutY="276.0" mnemonicParsing="false" onAction="#sysEgn" text="System Engineering" />
-      <CheckBox layoutX="468.0" layoutY="235.0" mnemonicParsing="false" onAction="#telEgn" text="Telematic Engineering" />
+      <CheckBox fx:id="cbSoft" layoutX="267.0" layoutY="235.0" mnemonicParsing="false" onAction="#sftEgn" text="Software Engineering" />
+      <CheckBox fx:id="cbSys" layoutX="344.0" layoutY="276.0" mnemonicParsing="false" onAction="#sysEgn" text="System Engineering" />
+      <CheckBox fx:id="cbTel" layoutX="468.0" layoutY="235.0" mnemonicParsing="false" onAction="#telEgn" text="Telematic Engineering" />
       <Label layoutX="160.0" layoutY="313.0" text="Birthday:">
          <font>
             <Font name="Verdana" size="20.0" />
          </font>
       </Label>
-      <DatePicker layoutX="277.0" layoutY="310.0" onAction="#birthdayDate" promptText="dd/mm/yy" />
+      <DatePicker fx:id="dateBirth" layoutX="277.0" layoutY="310.0" onAction="#birthdayDate" promptText="dd/mm/yy" />
       <Label layoutX="117.0" layoutY="357.0" text="Favorite Browser:">
          <font>
             <Font name="Verdana" size="20.0" />
