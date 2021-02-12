@@ -13,6 +13,7 @@ import javafx.fxml.*;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
@@ -79,25 +80,22 @@ public class ClassroomGUI implements Initializable {
     private ImageView userIcon;
 
     @FXML
-    private TableView<?> tbAccounts;
+    private TableView<UserAccount> tbAccounts;
 
     @FXML
-    private TableColumn<?, ?> tcId;
+    private TableColumn<UserAccount, String> tcUserName;
 
     @FXML
-    private TableColumn<?, ?> tcUserName;
+    private TableColumn<UserAccount, Gender> tcGender;
 
     @FXML
-    private TableColumn<?, ?> tcGender;
+    private TableColumn<UserAccount, String> tcCareer;
 
     @FXML
-    private TableColumn<?, ?> tcCareer;
+    private TableColumn<UserAccount, String> tcBirthday;
 
     @FXML
-    private TableColumn<?, ?> tcBirthday;
-
-    @FXML
-    private TableColumn<?, ?> tcBrowser;
+    private TableColumn<UserAccount, String> tcBrowser;
 
     public void welcomeToLogin() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
@@ -116,23 +114,36 @@ public class ClassroomGUI implements Initializable {
 
     @FXML
     void singIn(ActionEvent event) throws IOException {
-        for (int i = 0; i < classroom.getAccounts().size(); i++) {
-            UserAccount accounts = classroom.getAccounts().get(i);
-            if (txtUserName.getText().equals(accounts.getUserName())
-                    && txtPassword.getText().equals(accounts.getPassword())) {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("accountList.fxml"));
-                fxmlLoader.setController(this);
-                Parent dash = fxmlLoader.load();
-                mainPane.getChildren().setAll(dash);
-            } else {
+        boolean found = false;
+        if (classroom.getAccounts().size() != 0) {
+            for (int i = 0; i < classroom.getAccounts().size() && !found; i++) {
+                UserAccount accounts = classroom.getAccounts().get(i);
+                if (txtUserName.getText().equals(accounts.getUserName())
+                        & txtPassword.getText().equals(accounts.getPassword())) {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("accountList.fxml"));
+                    fxmlLoader.setController(this);
+                    Parent dash = fxmlLoader.load();
+                    mainPane.getChildren().setAll(dash);
+                    initTable();
+                    lblnameUser.setText(accounts.getUserName());
+                    userIcon.setImage(accounts.getUserIcon());
+                    found = true;
+                }
+            }
+            if (!found) {
                 Alert alert = new Alert(AlertType.ERROR);
-                alert.setHeaderText("Pareme bolas");
-                alert.setTitle("Error");
-                alert.setContentText("Usario o cantra fail");
+                alert.setHeaderText("Listen carefully and beware");
+                alert.setTitle("Error from Alejandro Varela App");
+                alert.setContentText("Wrong username or password");
                 alert.showAndWait();
             }
+        } else {
+            Alert alert1 = new Alert(AlertType.WARNING);
+            alert1.setHeaderText("Listen carefully and beware");
+            alert1.setTitle("WARNING from Alejandro Varela App");
+            alert1.setContentText("There are not users already!");
+            alert1.showAndWait();
         }
-
     }
 
     @FXML
@@ -165,38 +176,39 @@ public class ClassroomGUI implements Initializable {
                 || urlBrowse.getText().equals("Path does not exist") || gender.getSelectedToggle() == null
                 || dateBirth.getValue() == null || cbBrowsers.getValue().equals("") || urlBrowse.getText().equals("")) {
             Alert alert = new Alert(AlertType.WARNING);
-            alert.setHeaderText("Pareme bolas");
-            alert.setTitle("Warning");
-            alert.setContentText("Hay campos vacíos o imagen no cargada o inclusive un genero no seleccionado");
+            alert.setHeaderText("Look out and take care");
+            alert.setTitle("Warning message");
+            alert.setContentText("There are empty fields or an image not loaded or even a genre not selected");
             alert.setHeight(400);
             alert.showAndWait();
         } else if (pswUp.getText().length() <= 6) {
             Alert alert1 = new Alert(AlertType.ERROR);
-            alert1.setHeaderText("Pareme bolas");
-            alert1.setTitle("Error");
-            alert1.setContentText("Contraseña muy debil");
+            alert1.setHeaderText("Listen carefully and beware");
+            alert1.setTitle("Error Message");
+            alert1.setContentText("Very weak password must be greater than 6 characters");
             alert1.showAndWait();
         } else if (!cbSoft.isSelected() & !cbSys.isSelected() & !cbTel.isSelected()) {
             Alert alert1 = new Alert(AlertType.INFORMATION);
-            alert1.setHeaderText("No has estudiado");
-            alert1.setTitle("Information");
-            alert1.setContentText("Para crear una cuenta debe tener al menos una de estas profesiones");
+            alert1.setHeaderText("Have you not studied?");
+            alert1.setTitle("Information, Please Pay attention");
+            alert1.setContentText("To create an account you must have at least one of these professions");
             alert1.setHeight(400);
             alert1.showAndWait();
         } else {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Message");
-            alert.setHeaderText("Look, a Confirmation Dialog");
-            alert.setContentText("Are you ok with this?");
+            alert.setHeaderText("Look, Consider the following");
+            alert.setContentText("Are you sure to save this user?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
                 Alert alert2 = new Alert(AlertType.INFORMATION);
-                alert2.setTitle("redux and react");
+                alert2.setTitle("Redux and React");
                 alert2.setHeaderText("The User " + userUp.getText() + " have been added sucesfully");
                 alert2.setContentText("Take it easy bro!");
                 alert2.showAndWait();
-                classroom.addAccount(userUp.getText(), pswUp.getText(), icon, gender.getSelectedToggle().toString(),
-                        getCareers(), dateBirth.getValue().toString(), cbBrowsers.getValue());
+                maleRb = (RadioButton) gender.getSelectedToggle();
+                classroom.addAccount(userUp.getText(), pswUp.getText(), icon, maleRb.getText(), getCareers(),
+                        dateBirth.getValue().toString(), cbBrowsers.getValue());
             }
             userUp.setText("");
             pswUp.setText("");
@@ -237,53 +249,25 @@ public class ClassroomGUI implements Initializable {
     public String getCareers() {
         String careers = "";
         if (cbSoft.isSelected()) {
-            careers += cbSoft.getText();
-        } else if (cbSys.isSelected()) {
-            careers += cbSys.getText();
-        } else if (cbTel.isSelected()) {
-            careers += cbTel.getText();
+            careers += " " + cbSoft.getText();
+        }
+        if (cbSys.isSelected()) {
+            careers += " " + cbSys.getText();
+        }
+        if (cbTel.isSelected()) {
+            careers += " " + cbTel.getText();
         }
         return careers;
     }
 
-    @FXML
-    void rdFemale(ActionEvent event) {
-
-    }
-
-    @FXML
-    void rdMale(ActionEvent event) {
-
-    }
-
-    @FXML
-    void rdOther(ActionEvent event) {
-
-    }
-
-    @FXML
-    void sftEgn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void sysEgn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void telEgn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void birthdayDate(ActionEvent event) {
-
-    }
-
-    @FXML
-    void browsers(ActionEvent event) {
-
+    private void initTable() {
+        ObservableList<UserAccount> userAccount = FXCollections.observableArrayList(classroom.getAccounts());
+        tbAccounts.setItems(userAccount);
+        tcUserName.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("userName"));
+        tcGender.setCellValueFactory(new PropertyValueFactory<UserAccount, Gender>("gender"));
+        tcCareer.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("career"));
+        tcBirthday.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("birthday"));
+        tcBrowser.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("browser"));
     }
 
     @Override

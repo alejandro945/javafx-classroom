@@ -7,11 +7,11 @@ public class UserAccount {
     private Image userIcon;
     private String password;
     private Gender gender;
-    private Career career;
+    private String career;
     private String birthday;
     private String browser;
 
-    public UserAccount(String userName, String password, Image userIcon, Gender gender, Career career, String birthday,
+    public UserAccount(String userName, String password, Image userIcon, Gender gender, String career, String birthday,
             String browser) {
         this.userName = userName;
         this.password = password;
@@ -54,11 +54,11 @@ public class UserAccount {
         this.gender = gender;
     }
 
-    public Career getCareer() {
+    public String getCareer() {
         return this.career;
     }
 
-    public void setCareer(Career career) {
+    public void setCareer(String career) {
         this.career = career;
     }
 

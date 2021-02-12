@@ -16,17 +16,17 @@
             <Font name="Verdana Bold Italic" size="29.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="212.0" layoutY="68.0" prefHeight="15.0" prefWidth="176.0" text="..." textAlignment="CENTER">
+      <Label fx:id="lblnameUser" alignment="TOP_LEFT" layoutX="247.0" layoutY="58.0" prefHeight="15.0" prefWidth="176.0" text="..." textAlignment="CENTER">
          <font>
-            <Font name="Verdana Italic" size="19.0" />
+            <Font name="Verdana Italic" size="17.0" />
          </font>
       </Label>
-      <Button layoutX="494.0" layoutY="63.0" mnemonicParsing="false" onAction="#logOut" style="-fx-background-color: blue;" text="Log Out" textFill="WHITE">
+      <Button layoutX="578.0" layoutY="64.0" mnemonicParsing="false" onAction="#logOut" style="-fx-background-color: blue;" text="Log Out" textFill="WHITE">
          <font>
             <Font name="Verdana" size="17.0" />
          </font>
       </Button>
-      <ImageView fx:id="userIcon" fitHeight="55.0" fitWidth="64.0" layoutX="404.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="userIcon" fitHeight="55.0" fitWidth="64.0" layoutX="115.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true" />
       <Circle fill="WHITE" layoutX="487.0" layoutY="23.0" radius="19.0" stroke="#000dff" strokeType="INSIDE" />
       <Circle fill="WHITE" layoutX="540.0" layoutY="23.0" radius="19.0" stroke="#000dff" strokeType="INSIDE" />
       <Circle fill="WHITE" layoutX="597.0" layoutY="23.0" radius="19.0" stroke="#000dff" strokeType="INSIDE" />
@@ -35,15 +35,19 @@
             <Font name="Verdana Bold Italic" size="21.0" />
          </font>
       </Label>
-      <TableView layoutY="135.0" prefHeight="333.0" prefWidth="705.0">
+      <TableView fx:id="tbAccounts" layoutY="135.0" prefHeight="333.0" prefWidth="705.0">
         <columns>
-          <TableColumn fx:id="tcId" prefWidth="44.0" text="ID" />
           <TableColumn fx:id="tcUserName" prefWidth="165.0" text="USERNAME" />
             <TableColumn fx:id="tcGender" prefWidth="126.0" text="GENDER" />
             <TableColumn fx:id="tcCareer" prefWidth="142.0" text="CAREER" />
-            <TableColumn fx:id="tcBirthday" prefWidth="115.0" text="BIRTHDAY" />
-            <TableColumn fx:id="tcBrowser" prefWidth="112.0" text="BROWSER" />
+            <TableColumn fx:id="tcBirthday" prefWidth="145.0" text="BIRTHDAY" />
+            <TableColumn fx:id="tcBrowser" prefWidth="126.0" text="BROWSER" />
         </columns>
       </TableView>
+      <Label layoutX="188.0" layoutY="61.0" prefHeight="19.0" prefWidth="46.0" text="User:">
+         <font>
+            <Font name="Verdana" size="15.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
