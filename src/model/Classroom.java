@@ -29,4 +29,27 @@ public class Classroom {
         return accounts;
     }
 
+    public boolean validateUser(String userName, String password) {
+        boolean already = false;
+        for (int i = 0; i < getAccounts().size() && !already; i++) {
+            UserAccount accounts = getAccounts().get(i);
+            if (userName.equals(accounts.getUserName()) & password.equals(accounts.getPassword())) {
+                already = true;
+            }
+        }
+        return already;
+    }
+
+    public UserAccount getUser(String userName, String password) {
+        boolean found = false;
+        UserAccount user = null;
+        for (int i = 0; i < getAccounts().size() && !found; i++) {
+            if (userName.equals(getAccounts().get(i).getUserName())
+                    & password.equals(getAccounts().get(i).getPassword())) {
+                found = true;
+                user = getAccounts().get(i);
+            }
+        }
+        return user;
+    }
 }

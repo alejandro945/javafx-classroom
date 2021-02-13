@@ -22,8 +22,6 @@ import model.*;
 public class ClassroomGUI implements Initializable {
     private Classroom classroom;
 
-    private Image icon;
-
     public ClassroomGUI(Classroom cr) {
         this.classroom = cr;
     }
@@ -45,6 +43,8 @@ public class ClassroomGUI implements Initializable {
 
     @FXML
     private ToggleGroup gender;
+
+    private Image icon;
 
     @FXML
     private RadioButton maleRb;
@@ -105,7 +105,7 @@ public class ClassroomGUI implements Initializable {
     }
 
     @FXML
-    void logOut(ActionEvent event) throws IOException {
+    public void logOut(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         fxmlLoader.setController(this);
         Parent login = fxmlLoader.load();
@@ -113,24 +113,17 @@ public class ClassroomGUI implements Initializable {
     }
 
     @FXML
-    void singIn(ActionEvent event) throws IOException {
-        boolean found = false;
+    public void singIn(ActionEvent event) throws IOException {
         if (classroom.getAccounts().size() != 0) {
-            for (int i = 0; i < classroom.getAccounts().size() && !found; i++) {
-                UserAccount accounts = classroom.getAccounts().get(i);
-                if (txtUserName.getText().equals(accounts.getUserName())
-                        & txtPassword.getText().equals(accounts.getPassword())) {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("accountList.fxml"));
-                    fxmlLoader.setController(this);
-                    Parent dash = fxmlLoader.load();
-                    mainPane.getChildren().setAll(dash);
-                    initTable();
-                    lblnameUser.setText(accounts.getUserName());
-                    userIcon.setImage(accounts.getUserIcon());
-                    found = true;
-                }
-            }
-            if (!found) {
+            if (classroom.validateUser(txtUserName.getText(), txtPassword.getText())) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("accountList.fxml"));
+                fxmlLoader.setController(this);
+                Parent dash = fxmlLoader.load();
+                mainPane.getChildren().setAll(dash);
+                initTable();
+                lblnameUser.setText(classroom.getUser(txtUserName.getText(), txtPassword.getText()).getUserName());
+                userIcon.setImage(classroom.getUser(txtUserName.getText(), txtPassword.getText()).getUserIcon());
+            } else {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setHeaderText("Listen carefully and beware");
                 alert.setTitle("Error from Alejandro Varela App");
@@ -147,19 +140,12 @@ public class ClassroomGUI implements Initializable {
     }
 
     @FXML
-    void singUp(ActionEvent event) throws IOException {
+    public void singUp(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("register.fxml"));
         fxmlLoader.setController(this);
         Parent registerForm = fxmlLoader.load();
         mainPane.getChildren().setAll(registerForm);
         getComboItems();
-    }
-
-    public void getComboItems() {
-        ObservableList<String> browserList = FXCollections.observableArrayList("", "Chrome", "Mozilla", "Safari",
-                "Opera", "Other");
-        cbBrowsers.setValue("");
-        cbBrowsers.setItems(browserList);
     }
 
     @FXML
@@ -188,12 +174,12 @@ public class ClassroomGUI implements Initializable {
             alert1.setContentText("Very weak password must be greater than 6 characters");
             alert1.showAndWait();
         } else if (!cbSoft.isSelected() & !cbSys.isSelected() & !cbTel.isSelected()) {
-            Alert alert1 = new Alert(AlertType.INFORMATION);
-            alert1.setHeaderText("Have you not studied?");
-            alert1.setTitle("Information, Please Pay attention");
-            alert1.setContentText("To create an account you must have at least one of these professions");
-            alert1.setHeight(400);
-            alert1.showAndWait();
+            Alert alert2 = new Alert(AlertType.INFORMATION);
+            alert2.setHeaderText("Have you not studied?");
+            alert2.setTitle("Information, Please Pay attention");
+            alert2.setContentText("To create an account you must have at least one of these professions");
+            alert2.setHeight(400);
+            alert2.showAndWait();
         } else {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Message");
@@ -227,7 +213,7 @@ public class ClassroomGUI implements Initializable {
 
     @FXML
     public void fileChooser(ActionEvent event) {
-        Image userIcon = null;
+        Image userIc = null;
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JPG", "*.jpg"),
@@ -235,15 +221,11 @@ public class ClassroomGUI implements Initializable {
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             urlBrowse.setText(selectedFile.getPath());
-            userIcon = new Image(selectedFile.toURI().toString());
-            setUserIcon(userIcon);
+            userIc = new Image(selectedFile.toURI().toString());
+            icon = userIc;
         } else {
             urlBrowse.setText("Path does not exist");
         }
-    }
-
-    public void setUserIcon(Image userIcon) {
-        this.icon = userIcon;
     }
 
     public String getCareers() {
@@ -268,6 +250,13 @@ public class ClassroomGUI implements Initializable {
         tcCareer.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("career"));
         tcBirthday.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("birthday"));
         tcBrowser.setCellValueFactory(new PropertyValueFactory<UserAccount, String>("browser"));
+    }
+
+    public void getComboItems() {
+        ObservableList<String> browserList = FXCollections.observableArrayList("", "Chrome", "Mozilla", "Safari",
+                "Opera", "Other");
+        cbBrowsers.setValue("");
+        cbBrowsers.setItems(browserList);
     }
 
     @Override
